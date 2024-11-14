@@ -52,19 +52,31 @@ const projectsList = [
   },
 ];
 
+const initialState = {
+  originalProjects: projectsList,
+  filteredProjects: projectsList,
+};
+
 function projectsReducer(state, action) {
   switch (action.type) {
     case "ALL": {
-      // return state;
-      return projectsList;
+      return { ...state, filteredProjects: state.originalProjects };
     }
     case "OPEN": {
-      //return [...state.filter((project) => project.status === "OPEN")];
-      return projectsList.filter((project) => project.status === "OPEN");
+      return {
+        ...state,
+        filteredProjects: state.originalProjects.filter(
+          (project) => project.status === "OPEN"
+        ),
+      };
     }
     case "CLOSED": {
-      // return [...state.filter((project) => project.status === "CLOSED")];
-      return projectsList.filter((project) => project.status === "CLOSED");
+      return {
+        ...state,
+        filteredProjects: state.originalProjects.filter(
+          (project) => project.status === "CLOSED"
+        ),
+      };
     }
     default:
       throw new Error("unknown action : ") + action.type;
@@ -74,8 +86,8 @@ function projectsReducer(state, action) {
 function App() {
   const [isShow, setIsShow] = useState(true);
   // const [projects, setProjects] = useState(projectsList);
-  const [projects, dispatch] = useReducer(projectsReducer, projectsList);
-
+  const [projects, dispatch] = useReducer(projectsReducer, initialState);
+  console.log(projects.filteredProjects);
   return (
     <div>
       {isShow ? (
@@ -156,7 +168,7 @@ function App() {
               </thead>
               <tbody className="mt-4">
                 {/* ۰۱۲۳۴۵۶۷۸۹ */}
-                {projects.map((project) => (
+                {projects.filteredProjects.map((project) => (
                   <Project key={project.id} project={project} />
                 ))}
                 {/* <tr className="text-slate-600 bg-white ">
